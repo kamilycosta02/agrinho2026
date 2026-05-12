@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroCarbon - Simulador Agrinho 2026</title>
+    <style>
+        :root {
+            --primary: #2d5a27;
+            --secondary: #8bc34a;
+            --light: #f4f9f1;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light); color: #333; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 500px; width: 100%; }
+        h2 { color: var(--primary); text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:hover { background: var(--secondary); }
+        #resultado { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; text-align: center; }
+        .sustentavel { background: #d4edda; color: #155724; }
+        .alerta { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🌱 AgroCarbon Simulator</h2>
+    <p style="font-size: 0.9em; text-align: center;">Equilíbrio entre Produção e Meio Ambiente</p>
+    <hr>
+    
+    <div class="form-group">
+        <label>Área Plantada (Hectares):</label>
+        <input type="number" id="area" placeholder="Ex: 50">
+    </div>
+
+    <div class="form-group">
+        <label>Consumo de Diesel (Litros):</label>
+        <input type="number" id="diesel" placeholder="Total usado em máquinas">
+    </div>
+
+    <div class="form-group">
+        <label>Uso de Fertilizantes (Kg):</label>
+        <input type="number" id="fertilizante" placeholder="Fertilizantes nitrogenados">
+    </div>
+
+    <div class="form-group">
+        <label>Prática Sustentável?</label>
+        <select id="pratica">
+            <option value="nenhuma">Nenhuma / Convencional</option>
+            <option value="direto">Plantio Direto (-20% emissões)</option>
+            <option value="ilpf">ILPF (Sequestro de Carbono)</option>
+        </select>
+    </div>
+
+    <button onclick="calcular()">Calcular Pegada de Carbono</button>
+
+    <div id="resultado"></div>
+</div>
+
+<script>
+    function calcular() {
+        // Valores fictícios baseados em médias de emissão (Diesel ~2.6kg CO2/L | Fertilizante ~5.8kg CO2/kg)
+        const area = document.getElementById('area').value;
+        const diesel = document.getElementById('diesel').value;
+        const fert = document.getElementById('fertilizante').value;
+        const pratica = document.getElementById('pratica').value;
+
+        if(!area || !diesel || !fert) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+
+        // Cálculo base de emissão em kg de CO2
+        let emissaoTotal = (diesel * 2.68) + (fert * 5.85);
+        
+        // Aplicação de mitigação por práticas sustentáveis
+        let mensagemAdicional = "";
+        if(pratica === "direto") {
+            emissaoTotal *= 0.8;
+            mensagemAdicional = "Ótima escolha! O Plantio Direto ajuda a manter o carbono no solo.";
+        } else if(pratica === "ilpf") {
+            emissaoTotal *= 0.5;
+            mensagemAdicional = "Incrível! A Integração Lavoura-Pecuária-Floresta é o futuro da sustentabilidade.";
+        }
+
+        const resultadoDiv = document.getElementById('resultado');
+        resultadoDiv.style.display = 'block';
+        
+        // Exibição do resultado
+        resultadoDiv.innerHTML = `
+            <strong>Emissão Estimada:</strong><br>
+            <span style="font-size: 1.5em;">${(emissaoTotal / 1000).toFixed(2)} Toneladas de CO₂e</span><br>
+            <small>${mensagemAdicional}</small>
+        `;
+        
+        // Muda cor se for sustentável ou não
+        resultadoDiv.className = (emissaoTotal / area < 100) ? "sustentavel" : "alerta";
+    }
+</script>
+
+</body>
+</html>
