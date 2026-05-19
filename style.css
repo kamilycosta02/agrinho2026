@@ -12,12 +12,18 @@
     --danger: #e74c3c;     /* Alerta de alta emissão */
 }
 
-body { 
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-    background-color: var(--light); 
-    color: #333; 
+/* Plantas decorativas removidas */
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--light);
+    background-image: url('https://images.unsplash.com/photo-1518733057094-95b53148f7c4?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #333;
     margin: 0;
-    display: flex; 
+    display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
